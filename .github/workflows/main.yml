@@ -20,7 +20,7 @@ jobs:
       - name: Run Trivy vulnerability scanner on a public image
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'grpc/grpc:latest'
+          image-ref: 'grpc/csm-o11y-example-python-client'
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
