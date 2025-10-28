@@ -1,5 +1,5 @@
 name: Security Scan Public Image
-# Запуск workflow вручную через интерфейс GitHub Actions
+
 on:
   workflow_dispatch:
 
@@ -9,21 +9,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Run Trivy vulnerability scanner on a public image
         uses: aquasecurity/trivy-action@master
         with:
-          # Указываем образ для сканирования. Возьмем один из тегов grpc
           image-ref: 'grpc/grpc:latest'
-          
-          # Формат вывода результатов в виде таблицы для удобства чтения в логах
           format: 'table'
-          
-          # Завершить работу с кодом ошибки 1, если найдены уязвимости
           exit-code: '1'
-         
-          # Игнорировать уязвимости, для которых еще нет исправления
           ignore-unfixed: true
           vuln-type: 'os,library'
-          # Проверять на наличие уязвимостей уровня CRITICAL.
-          # Если хотя бы одна будет найдена, action завершится с ошибкой.
           severity: 'CRITICAL'
